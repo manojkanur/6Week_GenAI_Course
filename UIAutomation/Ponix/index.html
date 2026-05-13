@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponix - Smart Mutual Fund Investments</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4A843;
+            --gold-light: #F5E6B8;
+            --gold-dark: #B8912E;
+            --navy: #0D1B2A;
+            --navy-light: #1B2D45;
+            --teal: #17A2B8;
+            --teal-dark: #128A9E;
+            --red: #E74C3C;
+            --white: #FFFFFF;
+            --gray-100: #F8F9FA;
+            --gray-200: #E9ECEF;
+            --gray-600: #6C757D;
+            --gray-800: #343A40;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--navy);
+            overflow-x: hidden;
+            background: var(--white);
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 16px 0;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .navbar.scrolled {
+            background: rgba(13, 27, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gold);
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: var(--white);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+            opacity: 0.85;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+            opacity: 1;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--navy) !important;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600 !important;
+            opacity: 1 !important;
+            transition: transform 0.3s, box-shadow 0.3s !important;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 168, 67, 0.4);
+            color: var(--navy) !important;
+        }
+
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .mobile-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--white);
+            transition: 0.3s;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 50%, #1a3a5c 100%);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(212,168,67,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(23,162,184,0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(212,168,67,0.15);
+            border: 1px solid rgba(212,168,67,0.3);
+            padding: 8px 16px;
+            border-radius: 50px;
+            color: var(--gold);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 56px;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.15;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 .gold {
+            color: var(--gold);
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.7;
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--navy);
+            padding: 16px 36px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(212,168,67,0.35);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            padding: 16px 36px;
+            border: 2px solid rgba(255,255,255,0.25);
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-card {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 32px;
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .hero-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .hero-card-header h3 {
+            color: var(--white);
+            font-size: 18px;
+        }
+
+        .hero-card-header .badge {
+            background: rgba(23,162,184,0.2);
+            color: var(--teal);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .portfolio-value {
+            margin-bottom: 8px;
+        }
+
+        .portfolio-value .label {
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .portfolio-value .amount {
+            color: var(--white);
+            font-size: 36px;
+            font-weight: 800;
+        }
+
+        .portfolio-value .change {
+            color: #2ecc71;
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .chart-container {
+            height: 160px;
+            margin: 24px 0;
+            position: relative;
+        }
+
+        .chart-container svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .fund-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .fund-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+        }
+
+        .fund-item .name {
+            color: var(--white);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .fund-item .returns {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .fund-item .returns.positive {
+            color: #2ecc71;
+        }
+
+        /* STATS BAR */
+        .stats-bar {
+            background: var(--white);
+            padding: 40px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+
+        .stat-number .gold {
+            color: var(--gold);
+        }
+
+        .stat-label {
+            color: var(--gray-600);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* SECTION STYLES */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(212,168,67,0.1);
+            color: var(--gold-dark);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            color: var(--gray-600);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* SERVICES */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .service-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 20px;
+            padding: 40px 32px;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--teal));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(13,27,42,0.1);
+            border-color: transparent;
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(212,168,67,0.1), rgba(23,162,184,0.1));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 24px;
+        }
+
+        .service-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 12px;
+        }
+
+        .service-card p {
+            color: var(--gray-600);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* WHY PONIX */
+        .why-section {
+            background: var(--gray-100);
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .why-image {
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
+            border-radius: 24px;
+            padding: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .why-image::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(212,168,67,0.15), transparent);
+            border-radius: 50%;
+        }
+
+        .why-stat-card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .why-stat-card .value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--gold);
+            margin-bottom: 4px;
+        }
+
+        .why-stat-card .desc {
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+        }
+
+        .why-features {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .why-feature {
+            display: flex;
+            gap: 16px;
+        }
+
+        .why-feature-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            background: rgba(212,168,67,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .why-feature h4 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 6px;
+        }
+
+        .why-feature p {
+            color: var(--gray-600);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* FUNDS TABLE */
+        .funds-table-wrapper {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .funds-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .funds-table thead {
+            background: var(--navy);
+        }
+
+        .funds-table th {
+            padding: 16px 24px;
+            text-align: left;
+            color: rgba(255,255,255,0.8);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .funds-table td {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 15px;
+        }
+
+        .funds-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .funds-table tr:hover {
+            background: rgba(212,168,67,0.03);
+        }
+
+        .fund-name-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .fund-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .fund-category {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .cat-equity { background: rgba(23,162,184,0.1); color: var(--teal-dark); }
+        .cat-debt { background: rgba(212,168,67,0.1); color: var(--gold-dark); }
+        .cat-hybrid { background: rgba(108,117,125,0.1); color: var(--gray-600); }
+
+        .return-positive { color: #27ae60; font-weight: 700; }
+        .return-negative { color: var(--red); font-weight: 700; }
+
+        /* CALCULATOR */
+        .calculator-section {
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
+        }
+
+        .calculator-section .section-tag {
+            background: rgba(212,168,67,0.15);
+            color: var(--gold);
+        }
+
+        .calculator-section .section-header h2 {
+            color: var(--white);
+        }
+
+        .calculator-section .section-header p {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .calculator-card {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 48px;
+            backdrop-filter: blur(10px);
+        }
+
+        .calc-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .calc-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .calc-group label {
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .calc-group input, .calc-group select {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: var(--white);
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .calc-group input:focus, .calc-group select:focus {
+            border-color: var(--gold);
+        }
+
+        .calc-group select option {
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .calc-result {
+            background: rgba(212,168,67,0.1);
+            border: 1px solid rgba(212,168,67,0.2);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .calc-result .label {
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .calc-result .value {
+            color: var(--gold);
+            font-size: 42px;
+            font-weight: 800;
+        }
+
+        .calc-result .sub {
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .calc-btn {
+            width: 100%;
+            margin-top: 24px;
+        }
+
+        /* TESTIMONIALS */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '\201C';
+            font-family: 'Playfair Display', serif;
+            font-size: 80px;
+            color: var(--gold);
+            opacity: 0.2;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            line-height: 1;
+        }
+
+        .testimonial-stars {
+            color: var(--gold);
+            font-size: 16px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+
+        .testimonial-card p {
+            color: var(--gray-600);
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonial-avatar {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--gold), var(--teal));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .testimonial-author .name {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--navy);
+        }
+
+        .testimonial-author .role {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        /* CTA SECTION */
+        .cta-section {
+            background: var(--gray-100);
+            padding: 80px 0;
+        }
+
+        .cta-card {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
+            border-radius: 24px;
+            padding: 64px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-card::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(212,168,67,0.1), transparent);
+            border-radius: 50%;
+        }
+
+        .cta-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 38px;
+            color: var(--white);
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .cta-card p {
+            color: rgba(255,255,255,0.65);
+            font-size: 18px;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .cta-card .btn-primary {
+            position: relative;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: var(--navy);
+            padding: 64px 0 32px;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand .logo {
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 18px;
+        }
+
+        .social-links a:hover {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        .footer-col h4 {
+            color: var(--white);
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: var(--gold);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 24px 0;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            color: rgba(255,255,255,0.35);
+            font-size: 13px;
+        }
+
+        .footer-disclaimer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 24px 0;
+        }
+
+        .footer-disclaimer p {
+            color: rgba(255,255,255,0.25);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        /* ANIMATIONS */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 968px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .hero p {
+                margin: 0 auto 40px;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--navy);
+                flex-direction: column;
+                padding: 24px;
+                gap: 16px;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .calc-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h2 {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .cta-card {
+                padding: 40px 24px;
+            }
+
+            .cta-card h2 {
+                font-size: 28px;
+            }
+
+            .calculator-card {
+                padding: 32px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">PONIX</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#services">Services</a></li>
+                <li><a href="#why">Why Ponix</a></li>
+                <li><a href="#funds">Funds</a></li>
+                <li><a href="#calculator">Calculator</a></li>
+                <li><a href="#testimonials">Reviews</a></li>
+                <li><a href="#contact" class="nav-cta">Start Investing</a></li>
+            </ul>
+            <button class="mobile-toggle" id="mobileToggle" onclick="document.getElementById('navLinks').classList.toggle('open')">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">AMFI Registered Mutual Fund Distributor</div>
+                <h1>Grow Your Wealth with <span class="gold">Smart Investments</span></h1>
+                <p>Expert mutual fund advisory for every stage of your financial journey. SIP starting from just Rs. 500/month with personalized portfolio strategies.</p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn-primary">Start Your SIP &rarr;</a>
+                    <a href="#calculator" class="btn-secondary">Calculate Returns</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <div class="hero-card-header">
+                        <h3>Portfolio Overview</h3>
+                        <span class="badge">Live</span>
+                    </div>
+                    <div class="portfolio-value">
+                        <div class="label">Total Investment Value</div>
+                        <div class="amount">&#8377;24,85,200<span class="change">+18.4%</span></div>
+                    </div>
+                    <div class="chart-container">
+                        <svg viewBox="0 0 400 150" fill="none">
+                            <defs>
+                                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#D4A843" stop-opacity="0.3"/>
+                                    <stop offset="100%" stop-color="#D4A843" stop-opacity="0"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M0,120 C30,110 60,100 100,90 C140,80 160,85 200,60 C240,35 280,45 320,25 C360,10 380,15 400,5 L400,150 L0,150 Z" fill="url(#chartGrad)"/>
+                            <path d="M0,120 C30,110 60,100 100,90 C140,80 160,85 200,60 C240,35 280,45 320,25 C360,10 380,15 400,5" stroke="#D4A843" stroke-width="2.5" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="fund-items">
+                        <div class="fund-item">
+                            <span class="name">Large Cap Fund</span>
+                            <span class="returns positive">+22.3%</span>
+                        </div>
+                        <div class="fund-item">
+                            <span class="name">Mid Cap Growth</span>
+                            <span class="returns positive">+31.7%</span>
+                        </div>
+                        <div class="fund-item">
+                            <span class="name">Tax Saver ELSS</span>
+                            <span class="returns positive">+18.9%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+        <div class="stats-container">
+            <div class="stat-item fade-in">
+                <div class="stat-number">500<span class="gold">+</span></div>
+                <div class="stat-label">Happy Investors</div>
+            </div>
+            <div class="stat-item fade-in">
+                <div class="stat-number">&#8377;50<span class="gold">Cr+</span></div>
+                <div class="stat-label">Assets Managed</div>
+            </div>
+            <div class="stat-item fade-in">
+                <div class="stat-number">10<span class="gold">+</span></div>
+                <div class="stat-label">Years Experience</div>
+            </div>
+            <div class="stat-item fade-in">
+                <div class="stat-number">98<span class="gold">%</span></div>
+                <div class="stat-label">Client Retention</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SERVICES -->
+    <section id="services">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-tag">Our Services</div>
+                <h2>Investment Solutions for Every Goal</h2>
+                <p>From building your first corpus to planning retirement, we have the right strategy for you.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon">&#128200;</div>
+                    <h3>SIP Planning</h3>
+                    <p>Start building wealth with disciplined monthly investments. Our SIP plans are tailored to your income and goals.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">&#127919;</div>
+                    <h3>Goal-Based Investing</h3>
+                    <p>Whether it's a home, child's education, or retirement, we create portfolios aligned to your life goals.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">&#128176;</div>
+                    <h3>Tax Planning (ELSS)</h3>
+                    <p>Save up to Rs. 46,800 in taxes under Section 80C with Equity Linked Savings Schemes.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">&#128202;</div>
+                    <h3>Portfolio Review</h3>
+                    <p>Annual portfolio health checks to rebalance, optimize and ensure your investments stay on track.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">&#129309;</div>
+                    <h3>Lump Sum Advisory</h3>
+                    <p>Expert advice on deploying large amounts through systematic transfer plans for optimal returns.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">&#128218;</div>
+                    <h3>Financial Education</h3>
+                    <p>Free workshops and content through our Money Manthiram platform to boost your financial literacy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY PONIX -->
+    <section id="why" class="why-section">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-tag">Why Choose Us</div>
+                <h2>Your Trusted Wealth Partner</h2>
+                <p>We combine technology with personal advisory to deliver results that matter.</p>
+            </div>
+            <div class="why-grid">
+                <div class="why-image fade-in">
+                    <div class="why-stat-card">
+                        <div class="value">18.4%</div>
+                        <div class="desc">Average portfolio returns (3Y CAGR)</div>
+                    </div>
+                    <div class="why-stat-card">
+                        <div class="value">24 Hrs</div>
+                        <div class="desc">Maximum response time for any query</div>
+                    </div>
+                    <div class="why-stat-card">
+                        <div class="value">Zero</div>
+                        <div class="desc">Hidden charges or exit loads from us</div>
+                    </div>
+                </div>
+                <div class="why-features fade-in">
+                    <div class="why-feature">
+                        <div class="why-feature-icon">&#9989;</div>
+                        <div>
+                            <h4>AMFI Registered Distributor</h4>
+                            <p>Fully compliant and registered with AMFI, ensuring your investments are in safe hands.</p>
+                        </div>
+                    </div>
+                    <div class="why-feature">
+                        <div class="why-feature-icon">&#128640;</div>
+                        <div>
+                            <h4>Direct & Regular Plans</h4>
+                            <p>Access both direct and regular mutual fund plans based on your preference and expertise.</p>
+                        </div>
+                    </div>
+                    <div class="why-feature">
+                        <div class="why-feature-icon">&#128241;</div>
+                        <div>
+                            <h4>Digital-First Approach</h4>
+                            <p>Paperless KYC, instant fund tracking, and online transactions for seamless investing.</p>
+                        </div>
+                    </div>
+                    <div class="why-feature">
+                        <div class="why-feature-icon">&#128101;</div>
+                        <div>
+                            <h4>Personal Advisory</h4>
+                            <p>Dedicated relationship manager who understands your financial journey and goals.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOP FUNDS -->
+    <section id="funds">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-tag">Top Performing Funds</div>
+                <h2>Curated Fund Recommendations</h2>
+                <p>Our research team picks high-quality funds across categories for your portfolio.</p>
+            </div>
+            <div class="funds-table-wrapper fade-in">
+                <table class="funds-table">
+                    <thead>
+                        <tr>
+                            <th>Fund Name</th>
+                            <th>Category</th>
+                            <th>1Y Return</th>
+                            <th>3Y Return</th>
+                            <th>5Y Return</th>
+                            <th>Min. SIP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="fund-name-cell"><span class="fund-dot" style="background:var(--teal)"></span>Nifty 50 Index Fund</div></td>
+                            <td><span class="fund-category cat-equity">Equity</span></td>
+                            <td class="return-positive">+14.2%</td>
+                            <td class="return-positive">+16.8%</td>
+                            <td class="return-positive">+15.1%</td>
+                            <td>Rs. 500</td>
+                        </tr>
+                        <tr>
+                            <td><div class="fund-name-cell"><span class="fund-dot" style="background:var(--gold)"></span>Flexi Cap Growth Fund</div></td>
+                            <td><span class="fund-category cat-equity">Equity</span></td>
+                            <td class="return-positive">+22.5%</td>
+                            <td class="return-positive">+19.3%</td>
+                            <td class="return-positive">+18.7%</td>
+                            <td>Rs. 1,000</td>
+                        </tr>
+                        <tr>
+                            <td><div class="fund-name-cell"><span class="fund-dot" style="background:var(--red)"></span>Mid Cap Opportunities</div></td>
+                            <td><span class="fund-category cat-equity">Equity</span></td>
+                            <td class="return-positive">+28.1%</td>
+                            <td class="return-positive">+24.6%</td>
+                            <td class="return-positive">+21.2%</td>
+                            <td>Rs. 500</td>
+                        </tr>
+                        <tr>
+                            <td><div class="fund-name-cell"><span class="fund-dot" style="background:#27ae60"></span>Short Duration Debt Fund</div></td>
+                            <td><span class="fund-category cat-debt">Debt</span></td>
+                            <td class="return-positive">+7.8%</td>
+                            <td class="return-positive">+7.2%</td>
+                            <td class="return-positive">+7.5%</td>
+                            <td>Rs. 1,000</td>
+                        </tr>
+                        <tr>
+                            <td><div class="fund-name-cell"><span class="fund-dot" style="background:#8e44ad"></span>Aggressive Hybrid Fund</div></td>
+                            <td><span class="fund-category cat-hybrid">Hybrid</span></td>
+                            <td class="return-positive">+15.6%</td>
+                            <td class="return-positive">+14.1%</td>
+                            <td class="return-positive">+13.8%</td>
+                            <td>Rs. 500</td>
+                        </tr>
+                        <tr>
+                            <td><div class="fund-name-cell"><span class="fund-dot" style="background:var(--teal)"></span>ELSS Tax Saver Fund</div></td>
+                            <td><span class="fund-category cat-equity">Equity</span></td>
+                            <td class="return-positive">+19.4%</td>
+                            <td class="return-positive">+17.8%</td>
+                            <td class="return-positive">+16.5%</td>
+                            <td>Rs. 500</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="text-align:center; color:var(--gray-600); font-size:12px; margin-top:16px;">*Returns are illustrative. Past performance does not guarantee future results. Mutual fund investments are subject to market risks.</p>
+        </div>
+    </section>
+
+    <!-- CALCULATOR -->
+    <section id="calculator" class="calculator-section">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-tag">SIP Calculator</div>
+                <h2>See How Your Money Grows</h2>
+                <p>Calculate the future value of your systematic investment plan.</p>
+            </div>
+            <div class="calculator-card fade-in">
+                <div class="calc-inputs">
+                    <div class="calc-group">
+                        <label>Monthly SIP Amount (Rs.)</label>
+                        <input type="number" id="sipAmount" value="5000" min="500" step="500">
+                    </div>
+                    <div class="calc-group">
+                        <label>Expected Return Rate (%)</label>
+                        <input type="number" id="returnRate" value="12" min="1" max="30" step="0.5">
+                    </div>
+                    <div class="calc-group">
+                        <label>Investment Period (Years)</label>
+                        <input type="number" id="period" value="10" min="1" max="40">
+                    </div>
+                    <div class="calc-group">
+                        <label>Investment Type</label>
+                        <select id="investType">
+                            <option value="sip">SIP (Monthly)</option>
+                            <option value="lumpsum">Lump Sum</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="calc-result">
+                    <div class="label">Estimated Future Value</div>
+                    <div class="value" id="futureValue">&#8377;11,61,695</div>
+                    <div class="sub" id="investedAmount">Total Invested: Rs. 6,00,000 | Wealth Gain: Rs. 5,61,695</div>
+                </div>
+                <button class="btn-primary calc-btn" onclick="calculateSIP()">Calculate Returns</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-tag">Client Stories</div>
+                <h2>Trusted by Hundreds of Families</h2>
+                <p>Hear from investors who chose Ponix for their wealth creation journey.</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-in">
+                    <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p>Ponix helped me start my first SIP with just Rs. 1000. Three years later, my portfolio has grown beyond my expectations. Their guidance is invaluable.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">RK</div>
+                        <div>
+                            <div class="name">Rajesh Kumar</div>
+                            <div class="role">IT Professional, Chennai</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-in">
+                    <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p>The Money Manthiram content helped me understand mutual funds in Tamil. Now I confidently manage my family's investments with Ponix advisory.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">PS</div>
+                        <div>
+                            <div class="name">Priya Suresh</div>
+                            <div class="role">Business Owner, Coimbatore</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-in">
+                    <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p>Best part about Ponix is their transparency. No hidden charges, regular portfolio reviews, and always available when I have questions. Highly recommend!</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">VM</div>
+                        <div>
+                            <div class="name">Venkat M.</div>
+                            <div class="role">Doctor, Madurai</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="contact" class="cta-section">
+        <div class="section-container">
+            <div class="cta-card fade-in">
+                <h2>Start Your Investment Journey Today</h2>
+                <p>Book a free consultation with our experts. No commitments, just honest financial advice.</p>
+                <a href="https://www.instagram.com/money__manthiram/" target="_blank" class="btn-primary">Connect on Instagram &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="#" class="logo">PONIX</a>
+                <p>Your trusted partner for mutual fund investments. AMFI registered distributor helping families build wealth through disciplined investing.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/money__manthiram/" target="_blank" title="Instagram">&#128247;</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#services">Our Services</a></li>
+                    <li><a href="#why">Why Ponix</a></li>
+                    <li><a href="#funds">Top Funds</a></li>
+                    <li><a href="#calculator">SIP Calculator</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Investments</h4>
+                <ul>
+                    <li><a href="#">Equity Funds</a></li>
+                    <li><a href="#">Debt Funds</a></li>
+                    <li><a href="#">Hybrid Funds</a></li>
+                    <li><a href="#">ELSS Tax Saver</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="https://www.instagram.com/money__manthiram/" target="_blank">Money Manthiram</a></li>
+                    <li><a href="#">KYC Guide</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Ponix. All rights reserved.</p>
+            <p>AMFI Registered Mutual Fund Distributor</p>
+        </div>
+        <div class="footer-disclaimer">
+            <p>Mutual Fund investments are subject to market risks. Please read all scheme related documents carefully before investing. Past performance is not indicative of future returns. The information provided herein is for general informational purposes only and should not be construed as investment advice.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // SIP Calculator
+        function calculateSIP() {
+            const P = parseFloat(document.getElementById('sipAmount').value);
+            const r = parseFloat(document.getElementById('returnRate').value) / 100;
+            const n = parseInt(document.getElementById('period').value);
+            const type = document.getElementById('investType').value;
+
+            let futureValue, invested;
+
+            if (type === 'sip') {
+                const monthlyRate = r / 12;
+                const months = n * 12;
+                futureValue = P * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
+                invested = P * months;
+            } else {
+                futureValue = P * Math.pow(1 + r, n);
+                invested = P;
+            }
+
+            const gain = futureValue - invested;
+
+            document.getElementById('futureValue').innerHTML = '&#8377;' + formatNumber(Math.round(futureValue));
+            document.getElementById('investedAmount').textContent =
+                `Total Invested: Rs. ${formatNumber(Math.round(invested))} | Wealth Gain: Rs. ${formatNumber(Math.round(gain))}`;
+        }
+
+        function formatNumber(num) {
+            return num.toLocaleString('en-IN');
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    document.getElementById('navLinks').classList.remove('open');
+                }
+            });
+        });
+
+        // Counter animation
+        function animateCounters() {
+            document.querySelectorAll('.stat-number').forEach(counter => {
+                const text = counter.textContent;
+                const num = parseInt(text.match(/\d+/)[0]);
+                let current = 0;
+                const increment = num / 40;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= num) {
+                        current = num;
+                        clearInterval(timer);
+                    }
+                    counter.innerHTML = text.replace(/\d+/, Math.floor(current));
+                }, 40);
+            });
+        }
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    statsObserver.disconnect();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const statsBar = document.querySelector('.stats-bar');
+        if (statsBar) statsObserver.observe(statsBar);
+    </script>
+</body>
+</html>
